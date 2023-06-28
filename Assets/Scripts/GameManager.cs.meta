@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e204e3aeaad10e94ea5e7e48f04dccf7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _cylinderSpawner: {instanceID: 0}
+  - _ball: {instanceID: 0}
+  - _playerController: {instanceID: 0}
+  - _outsideController: {instanceID: 0}
+  - _enemyPrefab: {fileID: 7999659623171617604, guid: 6ad8f161339cc234bae3925c7bf11ac6, type: 3}
+  - _ballPrefab: {fileID: 4648612824307211950, guid: 08834b4949594614b97df08c85a11754, type: 3}
+  - _playerPrefab: {fileID: 235111158616370265, guid: 31c5234c3f924a0498bf8d804579d5bf, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
