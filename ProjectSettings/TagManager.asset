@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Sphere
+  - Plane
   layers:
   - Default
   - TransparentFX

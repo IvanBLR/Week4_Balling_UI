@@ -8,9 +8,9 @@ public class PlayerController : MonoBehaviour
     public Action<int> OnMouseClickEvent;
     public Action<Color> OnTouchedEnemyEvent;
 
-    [SerializeField]
-    private Slider _force;
+    [SerializeField] private Slider _force;
 
+    private Camera _camera;
     private int _clickCounter;
     private Rigidbody _rigidbody;
 
@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        _camera = FindObjectOfType<Camera>();
         _stopwatch = new Stopwatch();
         _force.value = 650;
         _rigidbody = GetComponent<Rigidbody>();
@@ -33,16 +34,20 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
             _stopwatch.Stop();
 
             if (Physics.Raycast(ray, out var hitInfo))
             {
-                var directionForce = (hitInfo.point - transform.position).normalized;
-                var multiplier = Mathf.Clamp((float)_stopwatch.Elapsed.TotalSeconds, 0.1f, 1);
-                PlayersMoving(directionForce, multiplier);
-                _clickCounter++;
-                OnMouseClickEvent?.Invoke(_clickCounter);
+                if (hitInfo.transform.gameObject.CompareTag("Plane"))
+                {
+                    var directionForce = (hitInfo.point - transform.position).normalized;
+                    var multiplier = Mathf.Clamp((float)_stopwatch.Elapsed.TotalSeconds, 0.1f, 1);
+                    PlayersMoving(directionForce, multiplier);
+                    _clickCounter++;
+                    OnMouseClickEvent?.Invoke(_clickCounter); 
+                }
+               
             }
         }
     }
@@ -64,7 +69,7 @@ public class PlayerController : MonoBehaviour
     }
     private void PlayersMoving(Vector3 directionForce, float multiplier)
     {
-        _rigidbody.AddForce(directionForce * _force.value * multiplier);
+        _rigidbody.AddForce(directionForce * (_force.value * multiplier));
     }
 
 }
