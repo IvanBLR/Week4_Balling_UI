@@ -58,8 +58,8 @@ public class GameManager : MonoBehaviour
         _lastThreeAvaliblePoints.Add(0);
 
         _playerController.OnMouseClickEvent += _ui.UpdateScore;
-        _playerController.OnTouchedEnemyEvent += _ui.UpdateEnemiesAmount;
-        _ui.SetEnemiesAmount(_enemiesAmount);
+        // _playerController.OnTouchedEnemyEvent += _ui.UpdateEnemiesAmount;
+        // _ui.SetEnemiesAmount(_enemiesAmount);
     }
 
     public void ResetPlayerColor(Color color)
@@ -136,6 +136,6 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         _playerController.OnMouseClickEvent -= _ui.UpdateScore;
-        _playerController.OnTouchedEnemyEvent -= _ui.UpdateEnemiesAmount;
+        //_playerController.OnTouchedEnemyEvent -= _ui.UpdateEnemiesAmount;
     }
 }
