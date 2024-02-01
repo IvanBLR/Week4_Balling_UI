@@ -26,7 +26,7 @@ public class ThirdSlide : MonoBehaviour
             transform.DOMoveX(_sphere.transform.position.x + 2, 1.4f);
             transform.DOMove(_enemy.transform.position, 1.4f)
                 .SetDelay(1.6f)
-                .OnComplete(Refresh);
+                .OnComplete(RefreshExample);
             _isAnimationActive = false;
         }
     }
@@ -47,15 +47,23 @@ public class ThirdSlide : MonoBehaviour
         }
     }
 
-    [UsedImplicitly] // TODO: надо назначить на кнопку активации этого слайда
+    [UsedImplicitly] // TODO: надо назначить на кнопкИ активации этого слайда
     public void ActivateThirdSlid() => _isAnimationActive = true;
 
-    private void Refresh()
+    [UsedImplicitly] // TODO: надо назначить на кнопкИ активации этого слайда
+    public void StopExample()
     {
-        StartCoroutine(Delay());
+        gameObject.SetActive(false);
+        _sphere.SetActive(false);
+        _enemy.SetActive(false);
     }
 
-    private IEnumerator Delay()
+    private void RefreshExample()
+    {
+        StartCoroutine(SeeExample());
+    }
+
+    private IEnumerator SeeExample()
     {
         transform.position = _startCubePosition;
         transform.GetComponent<MeshRenderer>().material = _startMaterial;
