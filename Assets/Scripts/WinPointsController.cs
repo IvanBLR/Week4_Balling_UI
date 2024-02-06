@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WinPointsController : MonoBehaviour
 {
@@ -11,9 +13,13 @@ public class WinPointsController : MonoBehaviour
    /// штрафные очки за уничтожение врага (красный кубик дотронулся до красного цилиндра): 80% от стоимости врага
    /// бонусные очки за быстрое скольжение: это показатель слайдера Force / 1000 (от 0.5 до 1)
 
+   [SerializeField] private Slider _forceSlider;
    private float _time;
    private float _enemies;
    private float _mouseClick;
    private float _failPoints;
    private float _force;
+
+   [UsedImplicitly] // назначен на слайдер
+   public void ChangeForce() => _force = _forceSlider.value;
 }

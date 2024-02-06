@@ -7,19 +7,12 @@ public class GameManager : MonoBehaviour
     public Action<Vector3, Color> OnPlayerTouchedSphereEvent;
 
     [SerializeField] private UI_Controller _ui;
-
     [SerializeField] private CylindrSpawner _cylinderSpawner;
-
     [SerializeField] private Ball _ball;
-
     [SerializeField] private PlayerController _playerController;
-
-    //  [SerializeField] private OutsidePlayerAndEnemyController _outsideController;
-
     [SerializeField] private Color[] _colors;
 
     [SerializeField] private GameObject _enemyPrefab;
-
     [SerializeField] private GameObject _ballPrefab;
 
     private float[] _xPlaneCoordinate = new float[] { -4, -3, -2, -1, 1, 2, 3, 4 };
@@ -58,8 +51,6 @@ public class GameManager : MonoBehaviour
         _lastThreeAvaliblePoints.Add(0);
 
         _playerController.OnMouseClickEvent += _ui.UpdateScore;
-        // _playerController.OnTouchedEnemyEvent += _ui.UpdateEnemiesAmount;
-        // _ui.SetEnemiesAmount(_enemiesAmount);
     }
 
     public void ResetPlayerColor(Color color)
@@ -136,6 +127,5 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         _playerController.OnMouseClickEvent -= _ui.UpdateScore;
-        //_playerController.OnTouchedEnemyEvent -= _ui.UpdateEnemiesAmount;
     }
 }
