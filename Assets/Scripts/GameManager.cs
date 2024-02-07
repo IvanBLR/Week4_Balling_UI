@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -7,6 +8,7 @@ public class GameManager : MonoBehaviour
     public Action<Vector3, Color> OnPlayerTouchedSphereEvent;
 
     [SerializeField] private UI_Controller _ui;
+    [SerializeField] private WinPointsController _win;
     [SerializeField] private CylindrSpawner _cylinderSpawner;
     [SerializeField] private Ball _ball;
     [SerializeField] private PlayerController _playerController;
@@ -23,18 +25,36 @@ public class GameManager : MonoBehaviour
     private List<float> _lastThreeAvaliblePoints = new();
     private int _colorNumber;
 
-    private void Awake()
+    private void Start()
+    {
+        PlayerPrefs.SetInt(GameConstant.TOTAL_CLICKS, 0);
+        PlayerPrefs.SetFloat(GameConstant.ENEMIES_POINTS, 0);
+        PlayerPrefs.Save();
+        _ui.GameStarted += FillGameBoard;
+        _ui.GameStarted += _win.GameStarted;
+        _win.GameFinished += _ui.ActivateGameOverScreen;
+    }
+
+    private void OnDestroy()
+    {
+        _ui.GameStarted -= _win.GameStarted;
+        _playerController.OnMouseClickEvent -= _ui.UpdateScore;
+        _ui.GameStarted -= FillGameBoard;
+        _win.GameFinished -= _ui.ActivateGameOverScreen;
+    }
+
+    private void FillGameBoard()
     {
         for (int i = 0; i < 6; i++)
         {
-            _cylinderSpawner.Initialize(_enemyPrefab, GetStartCoordinates(ref _xPlaneCoordinate, ref _yPlaneCoordinate), GetColor(), _colorNumber);
+            _cylinderSpawner.Initialize(_enemyPrefab, GetStartCoordinates(ref _xPlaneCoordinate, ref _yPlaneCoordinate),
+                GetColor(), _colorNumber);
         }
-        _ball.Initialize(_ballPrefab, GetStartCoordinates(ref _xPlaneCoordinate, ref _yPlaneCoordinate), GetColor(false));
-        _playerController.gameObject.SetActive(true);
-    }
 
-    private void Start()
-    {
+        _ball.Initialize(_ballPrefab, GetStartCoordinates(ref _xPlaneCoordinate, ref _yPlaneCoordinate),
+            GetColor(false));
+        _playerController.gameObject.SetActive(true);
+
         for (int i = 0; i < 8; i++)
         {
             if (_xPlaneCoordinate[i] != 0)
@@ -49,7 +69,6 @@ public class GameManager : MonoBehaviour
         }
 
         _lastThreeAvaliblePoints.Add(0);
-
         _playerController.OnMouseClickEvent += _ui.UpdateScore;
     }
 
@@ -121,11 +140,7 @@ public class GameManager : MonoBehaviour
         }
 
         _colorNumber = index;
+        //_win.EnemiesPoints(index);
         return _colors[index];
-    }
-
-    private void OnDestroy()
-    {
-        _playerController.OnMouseClickEvent -= _ui.UpdateScore;
     }
 }

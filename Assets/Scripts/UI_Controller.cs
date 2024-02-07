@@ -1,4 +1,5 @@
 using System;
+using DefaultNamespace;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
@@ -8,20 +9,25 @@ using UnityEngine.UI;
 
 public class UI_Controller : MonoBehaviour
 {
+    public Action GameStarted;
+
     [SerializeField] private SecondSlide _secondSlide;
-
+    //[SerializeField] private WinPointsController _win;
+    
     [SerializeField] private TextMeshProUGUI _totalClicks;
-
+   
     [SerializeField] private Canvas _gameCanvas;
     [SerializeField] private Canvas _instructionCanvas;
     [SerializeField] private Canvas _mainCanvas;
     [SerializeField] private Canvas _settingsCanvas;
+    [SerializeField] private Canvas _gameOver;
 
     [SerializeField] private GameObject[] _instructionSlides;
 
     [SerializeField] private Sprite[] _soundPictures;
 
     [SerializeField] private Button _previousButton;
+    [SerializeField] private Button _restart;
     [SerializeField] private Button _nextButton;
     [SerializeField] private Button _soundTumbler;
 
@@ -44,7 +50,7 @@ public class UI_Controller : MonoBehaviour
         _secondSlide.AnimationCompleted -= ActivateButtons;
     }
 
-    [UsedImplicitly] // TODO:  сделать активацию анимации на втором слайде
+    [UsedImplicitly] 
     public void NextInstructionSlide()
     {
         _instructionSlides[_currentSlideNumber].gameObject.SetActive(false);
@@ -67,7 +73,7 @@ public class UI_Controller : MonoBehaviour
         }
     }
 
-    [UsedImplicitly] // TODO: сделать активацию анимации на втором слайде
+    [UsedImplicitly] 
     public void PreviousInstructionSlide()
     {
         _instructionSlides[_currentSlideNumber].gameObject.SetActive(false);
@@ -126,18 +132,34 @@ public class UI_Controller : MonoBehaviour
     [UsedImplicitly] // назначить на кнопку Старт Гейм
     public void StartGame()
     {
+        GameStarted?.Invoke();
         _gameCanvas.gameObject.SetActive(true);
+        _gameOver.gameObject.SetActive(false);
         _mainCanvas.gameObject.SetActive(false);
         _settingsCanvas.gameObject.SetActive(false);
         _instructionCanvas.gameObject.SetActive(false);
     }
+
     [UsedImplicitly]
     public void Restart() => SceneManager.LoadScene("SampleScene");
 
+    // [UsedImplicitly] // назначен на кнопку Старт
+    // public void ActivateRestartButton() => _restart.gameObject.SetActive(true);
+
+    public void ActivateGameOverScreen()
+    {
+        _gameCanvas.gameObject.SetActive(true);
+        _gameCanvas.gameObject.SetActive(false);
+        _mainCanvas.gameObject.SetActive(false);
+        _settingsCanvas.gameObject.SetActive(false);
+        _instructionCanvas.gameObject.SetActive(false);
+        
+    }
     public void UpdateScore(int amount)
     {
-        var counter = amount.ToString();
-        _totalClicks.text = "Total clicks  " + counter;
+        _totalClicks.text = amount.ToString();
+        PlayerPrefs.SetInt(GameConstant.TOTAL_CLICKS, amount);
+        PlayerPrefs.Save();
     }
 
     private void ActivateButtons()

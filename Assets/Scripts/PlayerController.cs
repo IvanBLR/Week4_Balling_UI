@@ -2,13 +2,14 @@ using UnityEngine;
 using System.Diagnostics;
 using UnityEngine.UI;
 using System;
+using DefaultNamespace;
 
 public class PlayerController : MonoBehaviour
 {
     public Action<int> OnMouseClickEvent;
     public Action<Color> OnTouchedEnemyEvent;
 
-    [SerializeField] private Slider _force;
+    //[SerializeField] private Slider _force;
 
     private Camera _camera;
     private int _clickCounter;
@@ -17,11 +18,11 @@ public class PlayerController : MonoBehaviour
     private Stopwatch _stopwatch;
     private Color _playerColor;
 
+    private bool _isGameStarted;
     private void Start()
     {
         _camera = FindObjectOfType<Camera>();
         _stopwatch = new Stopwatch();
-        _force.value = 650;
         _rigidbody = GetComponent<Rigidbody>();
         _playerColor = transform.GetComponent<MeshRenderer>().material.color;
         _playerColor.a = 1;
@@ -29,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+       if (Input.GetMouseButtonDown(0))
         {
             _stopwatch.Restart();
         }
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviour
                     PlayersMoving(directionForce, multiplier);
                     _clickCounter++;
                     OnMouseClickEvent?.Invoke(_clickCounter);
+                    
                 }
             }
         }
@@ -74,6 +76,6 @@ public class PlayerController : MonoBehaviour
 
     private void PlayersMoving(Vector3 directionForce, float multiplier)
     {
-        _rigidbody.AddForce(directionForce * (_force.value * multiplier));
+        _rigidbody.AddForce(directionForce * (PlayerPrefs.GetFloat(GameConstant.FORCE) * multiplier));
     }
 }
