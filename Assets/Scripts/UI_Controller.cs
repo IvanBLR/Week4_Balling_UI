@@ -11,6 +11,10 @@ public class UI_Controller : MonoBehaviour
 {
     public Action GameStarted;
 
+    //[SerializeField] private Material _gameStartMaterial;
+    [SerializeField] private Material _gameFinishMaterial;
+    
+    [SerializeField] private GameObject _plane;
     [SerializeField] private SecondSlide _secondSlide;
     //[SerializeField] private WinPointsController _win;
     
@@ -27,7 +31,7 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] private Sprite[] _soundPictures;
 
     [SerializeField] private Button _previousButton;
-    [SerializeField] private Button _restart;
+   // [SerializeField] private Button _restart;
     [SerializeField] private Button _nextButton;
     [SerializeField] private Button _soundTumbler;
 
@@ -36,6 +40,8 @@ public class UI_Controller : MonoBehaviour
 
     private void Start()
     {
+        // _gameStartMaterial = _plane.gameObject.GetComponent<MeshRenderer>().materials[0];
+        // _gameFinishMaterial = _plane.gameObject.GetComponent<MeshRenderer>().materials[1];
         _currentSlideNumber = 0;
         _isSoundOn = true;
     }
@@ -141,19 +147,30 @@ public class UI_Controller : MonoBehaviour
     }
 
     [UsedImplicitly]
-    public void Restart() => SceneManager.LoadScene("SampleScene");
+    public void Restart()
+    {
+        // if (PlayerPrefs.GetInt(GameConstant.TOTAL_CLICKS) != 0)
+        // {
+            // PlayerPrefs.SetFloat(GameConstant.TOTAL_TIME, 0);
+            // PlayerPrefs.SetFloat(GameConstant.ENEMIES_POINTS, 0);
+            // PlayerPrefs.Save();
+        //}
+        SceneManager.LoadScene("SampleScene");
+    }
 
     // [UsedImplicitly] // назначен на кнопку Старт
     // public void ActivateRestartButton() => _restart.gameObject.SetActive(true);
 
     public void ActivateGameOverScreen()
     {
-        _gameCanvas.gameObject.SetActive(true);
+        _gameOver.gameObject.SetActive(true);
         _gameCanvas.gameObject.SetActive(false);
         _mainCanvas.gameObject.SetActive(false);
         _settingsCanvas.gameObject.SetActive(false);
         _instructionCanvas.gameObject.SetActive(false);
-        
+
+        _plane.gameObject.GetComponent<MeshRenderer>().material= _gameFinishMaterial;
+
     }
     public void UpdateScore(int amount)
     {

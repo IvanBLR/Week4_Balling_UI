@@ -52,7 +52,7 @@ public class WinPointsController : MonoBehaviour
         {
             _isGameStarted = false;
             _playerController.OnMouseClickEvent = null;
-            PlayerPrefs.SetFloat(GameConstant.TOTAL_TIME, (float)(Math.Round(_time, 2) / 60));
+            PlayerPrefs.SetFloat(GameConstant.TOTAL_TIME, (float)Math.Round(_time, 2));
             PlayerPrefs.Save();
             GameFinished?.Invoke();
         }

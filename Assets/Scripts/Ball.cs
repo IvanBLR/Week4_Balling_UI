@@ -1,16 +1,13 @@
 using UnityEngine;
+
 public class Ball : MonoBehaviour
 {
     private GameManager _gameManager;
+    private GameObject _ball;
+
     private void Start()
     {
         _gameManager = FindObjectOfType<GameManager>();
-    }
-    public void Initialize(GameObject ballPrefab, Vector3 position, Color color)
-    {
-        var ball = Instantiate(ballPrefab);
-        ball.transform.position = position;
-        ball.GetComponent<MeshRenderer>().material.color = color;
     }
 
     private void OnTriggerEnter(Collider otherCollider)
@@ -24,6 +21,19 @@ public class Ball : MonoBehaviour
             _gameManager.ResetPlayerColor(color);
         }
     }
+
+    public void Initialize(GameObject ballPrefab, Vector3 position, Color color)
+    {
+        _ball = Instantiate(ballPrefab);
+        _ball.transform.position = position;
+        _ball.GetComponent<MeshRenderer>().material.color = color;
+    }
+
+    public void HideBall()
+    {
+        _ball.SetActive(false);
+    }
+
     private void SetNewPositionAndColor(Vector3 position, Color color)
     {
         transform.position = position;

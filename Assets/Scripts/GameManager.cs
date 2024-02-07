@@ -27,20 +27,25 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        _ballPrefab.SetActive(true);
         PlayerPrefs.SetInt(GameConstant.TOTAL_CLICKS, 0);
         PlayerPrefs.SetFloat(GameConstant.ENEMIES_POINTS, 0);
         PlayerPrefs.Save();
+        
+        _playerController.OnMouseClickEvent += _ui.UpdateScore;
         _ui.GameStarted += FillGameBoard;
         _ui.GameStarted += _win.GameStarted;
         _win.GameFinished += _ui.ActivateGameOverScreen;
+        _win.GameFinished += DeactivateGameEntities;
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
         _ui.GameStarted -= _win.GameStarted;
         _playerController.OnMouseClickEvent -= _ui.UpdateScore;
         _ui.GameStarted -= FillGameBoard;
         _win.GameFinished -= _ui.ActivateGameOverScreen;
+        _win.GameFinished -= DeactivateGameEntities;
     }
 
     private void FillGameBoard()
@@ -69,7 +74,6 @@ public class GameManager : MonoBehaviour
         }
 
         _lastThreeAvaliblePoints.Add(0);
-        _playerController.OnMouseClickEvent += _ui.UpdateScore;
     }
 
     public void ResetPlayerColor(Color color)
@@ -138,9 +142,13 @@ public class GameManager : MonoBehaviour
         {
             _enemiesAmount[index] += 1;
         }
-
         _colorNumber = index;
-        //_win.EnemiesPoints(index);
         return _colors[index];
+    }
+
+    private void DeactivateGameEntities()
+    {
+        _playerController.gameObject.SetActive(false);
+        _ball.HideBall();
     }
 }
