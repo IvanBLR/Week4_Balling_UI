@@ -11,15 +11,14 @@ public class UI_Controller : MonoBehaviour
 {
     public Action GameStarted;
 
-    //[SerializeField] private Material _gameStartMaterial;
     [SerializeField] private Material _gameFinishMaterial;
-    
+
     [SerializeField] private GameObject _plane;
     [SerializeField] private SecondSlide _secondSlide;
-    //[SerializeField] private WinPointsController _win;
-    
+
     [SerializeField] private TextMeshProUGUI _totalClicks;
-   
+    [SerializeField] private TextMeshProUGUI _totalPoints;
+
     [SerializeField] private Canvas _gameCanvas;
     [SerializeField] private Canvas _instructionCanvas;
     [SerializeField] private Canvas _mainCanvas;
@@ -31,7 +30,7 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] private Sprite[] _soundPictures;
 
     [SerializeField] private Button _previousButton;
-   // [SerializeField] private Button _restart;
+
     [SerializeField] private Button _nextButton;
     [SerializeField] private Button _soundTumbler;
 
@@ -56,7 +55,7 @@ public class UI_Controller : MonoBehaviour
         _secondSlide.AnimationCompleted -= ActivateButtons;
     }
 
-    [UsedImplicitly] 
+    [UsedImplicitly]
     public void NextInstructionSlide()
     {
         _instructionSlides[_currentSlideNumber].gameObject.SetActive(false);
@@ -79,7 +78,7 @@ public class UI_Controller : MonoBehaviour
         }
     }
 
-    [UsedImplicitly] 
+    [UsedImplicitly]
     public void PreviousInstructionSlide()
     {
         _instructionSlides[_currentSlideNumber].gameObject.SetActive(false);
@@ -106,11 +105,11 @@ public class UI_Controller : MonoBehaviour
     [UsedImplicitly] // назначен на кнопку переключения звука
     public void TurnPicturesSoundOnOff()
     {
+        _isSoundOn = !_isSoundOn;
         if (_isSoundOn)
             _soundTumbler.image.sprite = _soundPictures[0];
         else
             _soundTumbler.image.sprite = _soundPictures[1];
-        _isSoundOn = !_isSoundOn;
     }
 
     [UsedImplicitly] // вызов меню инструкций
@@ -149,17 +148,8 @@ public class UI_Controller : MonoBehaviour
     [UsedImplicitly]
     public void Restart()
     {
-        // if (PlayerPrefs.GetInt(GameConstant.TOTAL_CLICKS) != 0)
-        // {
-            // PlayerPrefs.SetFloat(GameConstant.TOTAL_TIME, 0);
-            // PlayerPrefs.SetFloat(GameConstant.ENEMIES_POINTS, 0);
-            // PlayerPrefs.Save();
-        //}
         SceneManager.LoadScene("SampleScene");
     }
-
-    // [UsedImplicitly] // назначен на кнопку Старт
-    // public void ActivateRestartButton() => _restart.gameObject.SetActive(true);
 
     public void ActivateGameOverScreen()
     {
@@ -169,13 +159,15 @@ public class UI_Controller : MonoBehaviour
         _settingsCanvas.gameObject.SetActive(false);
         _instructionCanvas.gameObject.SetActive(false);
 
-        _plane.gameObject.GetComponent<MeshRenderer>().material= _gameFinishMaterial;
+        _totalPoints.text = PlayerPrefs.GetFloat(GameConstant.CURRENT_SCORE).ToString();
 
+        _plane.gameObject.GetComponent<MeshRenderer>().material = _gameFinishMaterial;
     }
+
     public void UpdateScore(int amount)
     {
         _totalClicks.text = amount.ToString();
-        PlayerPrefs.SetInt(GameConstant.TOTAL_CLICKS, amount);
+        PlayerPrefs.SetFloat(GameConstant.TOTAL_CLICKS, amount);
         PlayerPrefs.Save();
     }
 
