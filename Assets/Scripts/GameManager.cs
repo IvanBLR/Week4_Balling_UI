@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using DefaultNamespace;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -28,9 +27,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _ballPrefab.SetActive(true);
-        PlayerPrefs.SetInt(GameConstant.TOTAL_CLICKS, 0);
-        PlayerPrefs.SetFloat(GameConstant.ENEMIES_POINTS, 0);
-        PlayerPrefs.Save();
         
         _playerController.OnMouseClickEvent += _ui.UpdateScore;
         _ui.GameStarted += FillGameBoard;

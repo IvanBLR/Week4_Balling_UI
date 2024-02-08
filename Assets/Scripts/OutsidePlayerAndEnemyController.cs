@@ -23,21 +23,15 @@ public class OutsidePlayerAndEnemyController : MonoBehaviour
         if (collision.transform.tag == "Enemy")
         {
             var enemy = collision.gameObject.GetComponent<MeshRenderer>().material.color;
+
             if (enemy.Equals(Color.red))
-            {
-                EnemyDie?.Invoke(1.9f);
-            }
+                EnemyDie?.Invoke(2.1f);
 
             if (enemy.Equals(Color.green))
-            {
                 EnemyDie?.Invoke(0.9f);
-            }
 
             if (enemy.Equals(Color.yellow))
-            {
                 EnemyDie?.Invoke(1.2f);
-            }
-
 
             Destroy(collision.gameObject);
         }

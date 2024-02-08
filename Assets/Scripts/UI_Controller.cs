@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UI_Controller : MonoBehaviour
@@ -39,8 +38,6 @@ public class UI_Controller : MonoBehaviour
 
     private void Start()
     {
-        // _gameStartMaterial = _plane.gameObject.GetComponent<MeshRenderer>().materials[0];
-        // _gameFinishMaterial = _plane.gameObject.GetComponent<MeshRenderer>().materials[1];
         _currentSlideNumber = 0;
         _isSoundOn = true;
     }
@@ -126,7 +123,7 @@ public class UI_Controller : MonoBehaviour
         _mainCanvas.gameObject.SetActive(false);
     }
 
-    [UsedImplicitly] // возврат в главное меню. TODO: Назначить на все кнопки
+    [UsedImplicitly] // возврат в главное меню
     public void CallMainMenu()
     {
         _mainCanvas.gameObject.SetActive(true);

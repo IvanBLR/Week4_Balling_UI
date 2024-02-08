@@ -1,4 +1,3 @@
-using System;
 using DefaultNamespace;
 using JetBrains.Annotations;
 using TMPro;
@@ -21,7 +20,6 @@ public class StatsMenu : MonoBehaviour
         _clicks.text = PlayerPrefs.GetFloat(GameConstant.TOTAL_CLICKS).ToString();
         _enemies.text = PlayerPrefs.GetFloat(GameConstant.ENEMIES_POINTS).ToString();
     }
-
 
     [UsedImplicitly] // назначен на крестик
     public void CloseStatsMenu()
