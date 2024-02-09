@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using YG;
 
 public class WinPointsController : MonoBehaviour
 {
@@ -111,10 +112,12 @@ public class WinPointsController : MonoBehaviour
         float bonusPoint = _forceSlider.value / 1000;
 
         float result = (float)Math.Round(timePoint + enemiesPoint + clickPoint + bonusPoint, 2);
+        //result *= 100;
         float bestScore = PlayerPrefs.GetFloat(GameConstant.BEST_SCORE);
 
         if (bestScore < result)
         {
+           // YandexGame.NewLeaderboardScores("LeaderBoardBestScore", (int)result);
             PlayerPrefs.SetFloat(GameConstant.BEST_SCORE, result);
             PlayerPrefs.Save();
         }

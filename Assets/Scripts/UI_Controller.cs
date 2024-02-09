@@ -5,10 +5,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YG;
 
 public class UI_Controller : MonoBehaviour
 {
     public Action GameStarted;
+
+    [SerializeField] private ReviewYG _reviewYg;
 
     [SerializeField] private Material _gameFinishMaterial;
 
@@ -18,18 +21,23 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _totalClicks;
     [SerializeField] private TextMeshProUGUI _totalPoints;
 
+    [SerializeField] private GameObject _slidesHelper;
+    [SerializeField] private GameObject _firstSlideHelper;
+    [SerializeField] private GameObject _secondSlideHelper;
+    [SerializeField] private GameObject _thirdSlideHelper;
+
     [SerializeField] private Canvas _gameCanvas;
     [SerializeField] private Canvas _instructionCanvas;
     [SerializeField] private Canvas _mainCanvas;
     [SerializeField] private Canvas _settingsCanvas;
     [SerializeField] private Canvas _gameOver;
+    [SerializeField] private Canvas _leaderboard;
 
     [SerializeField] private GameObject[] _instructionSlides;
 
     [SerializeField] private Sprite[] _soundPictures;
 
     [SerializeField] private Button _previousButton;
-
     [SerializeField] private Button _nextButton;
     [SerializeField] private Button _soundTumbler;
 
@@ -63,14 +71,10 @@ public class UI_Controller : MonoBehaviour
 
         _secondSlide.ActivateSecondSlid(_currentSlideNumber == 1);
 
+        TumblerSlides();
+
         if (_currentSlideNumber >= _instructionSlides.Length - 1)
         {
-            _nextButton.interactable = false;
-        }
-
-        if (_currentSlideNumber == 1)
-        {
-            _previousButton.interactable = false;
             _nextButton.interactable = false;
         }
     }
@@ -86,15 +90,11 @@ public class UI_Controller : MonoBehaviour
 
         _secondSlide.ActivateSecondSlid(_currentSlideNumber == 1);
 
+        TumblerSlides();
+
         if (_currentSlideNumber <= 0)
         {
             _previousButton.interactable = false;
-        }
-
-        if (_currentSlideNumber == 1)
-        {
-            _previousButton.interactable = false;
-            _nextButton.interactable = false;
         }
     }
 
@@ -112,6 +112,7 @@ public class UI_Controller : MonoBehaviour
     [UsedImplicitly] // вызов меню инструкций
     public void CallInstruction()
     {
+        _slidesHelper.SetActive(true);
         _instructionCanvas.gameObject.SetActive(true);
         _mainCanvas.gameObject.SetActive(false);
     }
@@ -129,6 +130,7 @@ public class UI_Controller : MonoBehaviour
         _mainCanvas.gameObject.SetActive(true);
         _instructionCanvas.gameObject.SetActive(false);
         _settingsCanvas.gameObject.SetActive(false);
+        _slidesHelper.SetActive(false);
     }
 
     [UsedImplicitly] // назначить на кнопку Старт Гейм
@@ -145,7 +147,31 @@ public class UI_Controller : MonoBehaviour
     [UsedImplicitly]
     public void Restart()
     {
+        YandexGame.FullscreenShow();
         SceneManager.LoadScene("SampleScene");
+
+        if (YandexGame.EnvironmentData.reviewCanShow)
+        {
+            _reviewYg.ReviewAvailable?.Invoke();
+        }
+        else
+        {
+            _reviewYg.ReviewNotAvailable?.Invoke();
+        }
+    }
+
+    [UsedImplicitly]
+    public void RateGame()
+    {
+        YandexGame.ReviewShow(true);
+    }
+
+    [UsedImplicitly]
+    public void CallLeaderBoard()
+    {
+        //LeaderboardYG.UpdateLBMethod.OnEnable;
+        _leaderboard.gameObject.SetActive(true);
+        _mainCanvas.gameObject.SetActive(false);
     }
 
     public void ActivateGameOverScreen()
@@ -172,5 +198,42 @@ public class UI_Controller : MonoBehaviour
     {
         _nextButton.interactable = true;
         _previousButton.interactable = true;
+    }
+
+    private void TumblerSlides()
+    {
+        switch (_currentSlideNumber)
+        {
+            case 0:
+            {
+                _firstSlideHelper.SetActive(true);
+                _secondSlideHelper.SetActive(false);
+                _thirdSlideHelper.SetActive(false);
+                break;
+            }
+            case 1:
+            {
+                _firstSlideHelper.SetActive(false);
+                _secondSlideHelper.SetActive(true);
+                _thirdSlideHelper.SetActive(false);
+                _previousButton.interactable = false;
+                _nextButton.interactable = false;
+                break;
+            }
+            case 2:
+            {
+                _firstSlideHelper.SetActive(false);
+                _secondSlideHelper.SetActive(false);
+                _thirdSlideHelper.SetActive(true);
+                break;
+            }
+            default:
+            {
+                _thirdSlideHelper.SetActive(false);
+                _previousButton.interactable = true;
+                _nextButton.interactable = true;
+                break;
+            }
+        }
     }
 }

@@ -3,13 +3,16 @@ using System.Diagnostics;
 using UnityEngine.UI;
 using System;
 using DefaultNamespace;
+using YG;
+using Debug = UnityEngine.Debug;
 
 public class PlayerController : MonoBehaviour
 {
     public Action<int> OnMouseClickEvent;
     public Action<Color> OnTouchedEnemyEvent;
 
-    //[SerializeField] private Slider _force;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _audioClip;
 
     private Camera _camera;
     private int _clickCounter;
@@ -19,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private Color _playerColor;
 
     private bool _isGameStarted;
+
     private void Start()
     {
         _camera = FindObjectOfType<Camera>();
@@ -30,20 +34,21 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-       if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             _stopwatch.Restart();
         }
 
         if (Input.GetMouseButtonUp(0))
         {
+            _audioSource.PlayOneShot(_audioClip);
             var ray = _camera.ScreenPointToRay(Input.mousePosition);
             _stopwatch.Stop();
 
             if (Physics.Raycast(ray, out var hitInfo))
             {
                 if (hitInfo.transform.gameObject.CompareTag("Plane") ||
-                    hitInfo.transform.gameObject.CompareTag("Enemy") || 
+                    hitInfo.transform.gameObject.CompareTag("Enemy") ||
                     hitInfo.transform.gameObject.CompareTag("Sphere"))
                 {
                     var directionForce = (hitInfo.point - transform.position).normalized;
@@ -51,7 +56,6 @@ public class PlayerController : MonoBehaviour
                     PlayersMoving(directionForce, multiplier);
                     _clickCounter++;
                     OnMouseClickEvent?.Invoke(_clickCounter);
-                    
                 }
             }
         }
